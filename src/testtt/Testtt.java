@@ -48,7 +48,7 @@ public class Testtt {
     private JButton nextButton;
     private JButton playButton;
     private JPanel Jpanelimg;
-
+    private Musicas mp3 = new Musicas();
     public Testtt() {        // Criação do JFrame
         JFrame frame = new JFrame("Music Player");
         frame.setSize(300, 500);
@@ -101,9 +101,9 @@ public class Testtt {
         // Configuração e exibição do frame
         frame.setVisible(true);
 
+        mp3.escolherArquivo();
         playButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Musicas mp3 = new Musicas();
                 mp3.toca();
             }
         });
