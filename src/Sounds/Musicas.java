@@ -35,16 +35,23 @@ public class Musicas  {
             audioSelecionado = fileChooser.getSelectedFile().toPath().toString(); //Talvez n precise do toString
         }
     }
-    public void toca() {
-
+    public void iniciaPrograma(){
         media = new Media(new File(audioSelecionado).toURI().toString());
         mediaPlayer = new MediaPlayer(media);
+    }
+
+    public void toca() {
             mediaPlayer.play();
-//            InputStream inputStream = this.getClass().getResourceAsStream("Legend.mp3");
-//            player = new Player(inputStream);
-//            player.play();
-
     }
 
+    public void pausa() {
+            mediaPlayer.pause();
     }
+
+    public void parar() {
+        if(mediaPlayer != null){
+            mediaPlayer.stop();
+        }
+    }
+}
 

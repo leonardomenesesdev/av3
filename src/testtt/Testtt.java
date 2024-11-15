@@ -48,6 +48,9 @@ public class Testtt {
     private JButton nextButton;
     private JButton playButton;
     private JPanel Jpanelimg;
+    private JButton pauseButton;
+    private JPanel panel2;
+    private JButton addMusic;
     private Musicas mp3 = new Musicas();
     public Testtt() {        // Criação do JFrame
         JFrame frame = new JFrame("Music Player");
@@ -66,6 +69,7 @@ public class Testtt {
         };
         imagePanel.setBounds(75, 30, 150, 150);
         frame.add(imagePanel);
+
 
         // Título da música
         JLabel songTitleLabel = new JLabel("Song Title", SwingConstants.CENTER);
@@ -98,13 +102,38 @@ public class Testtt {
         nextButton.setBounds(200, 320, 50, 50);
         frame.add(nextButton);
 
+        JButton pauseButton = new JButton("||");
+        pauseButton.setBounds(125, 320, 50, 50);
+        frame.add(pauseButton);
+
+        addMusic.setBounds(30, 295, 240, 20);
+        frame.add(addMusic);
+
         // Configuração e exibição do frame
         frame.setVisible(true);
 
-        mp3.escolherArquivo();
+
+        addMusic.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                mp3.parar();
+                playButton.setVisible(true);
+                mp3.escolherArquivo();
+                mp3.iniciaPrograma();
+            }
+        });
+
         playButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                playButton.setVisible(false);
+                pauseButton.setVisible(true);
                 mp3.toca();
+            }
+        });
+        pauseButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                playButton.setVisible(true);
+                pauseButton.setVisible(false);
+                mp3.pausa();
             }
         });
     }
