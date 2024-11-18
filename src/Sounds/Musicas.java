@@ -1,20 +1,17 @@
 package Sounds;
 
 
-import javafx.fxml.JavaFXBuilderFactory;
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.scene.media.Media;
 
 import javafx.scene.media.MediaPlayer;
-import javafx.stage.FileChooser;
-import javazoom.jl.decoder.JavaLayerException;
-import javazoom.jl.player.Player;
+import javafx.util.Duration;
+
 
 import javax.swing.*;
 import java.io.File;
-import java.io.InputStream;
 
 public class Musicas  {
-    private Player player;
     private MediaPlayer mediaPlayer;
     private Media media;
     private String audioSelecionado;
@@ -40,12 +37,15 @@ public class Musicas  {
         mediaPlayer = new MediaPlayer(media);
     }
 
+    public String getAudioSelecionado() {
+        return audioSelecionado;
+    }
     public void toca() {
-            mediaPlayer.play();
+        mediaPlayer.play();
     }
 
     public void pausa() {
-            mediaPlayer.pause();
+        mediaPlayer.pause();
     }
 
     public void parar() {
@@ -53,5 +53,9 @@ public class Musicas  {
             mediaPlayer.stop();
         }
     }
-}
 
+//Pq está retornando NaN?
+//    public Double duracao(){
+//        return mediaPlayer.getStopTime().toSeconds();
+//    }
+}

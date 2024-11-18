@@ -1,37 +1,3 @@
-//package Sounds;
-//
-//import javax.swing.*;
-//import java.awt.*;
-//import java.awt.event.ActionEvent;
-//import java.awt.event.ActionListener;
-//
-//public class VisualReprodutor {
-//    private JButton playButton;
-//    private JPanel panel1;
-//
-//    public VisualReprodutor() {
-//        JFrame frame = new JFrame("Reprodutor Visual");
-//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        frame.setSize(500, 400);
-//        panel1 = new JPanel();
-//
-//        panel1.add(playButton);
-//        frame.add(panel1);
-//        frame.setVisible(true);
-//        panel1.setBackground(new Color(86, 98, 110));
-//        playButton.setFocusPainted(false);
-//
-//
-//
-//
-//        playButton.addActionListener(new ActionListener() {
-//            public void actionPerformed(ActionEvent e) {
-//                Musicas mp3 = new Musicas();
-//                mp3.toca();
-//            }
-//        });
-//    }
-//}
 package testtt;
 
 import Sounds.Musicas;
@@ -40,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 public class Testtt {
     private JPanel panel1;
@@ -106,7 +73,9 @@ public class Testtt {
         pauseButton.setBounds(125, 320, 50, 50);
         frame.add(pauseButton);
 
-        addMusic.setBounds(30, 295, 240, 20);
+
+        JButton addMusic = new JButton("☰");
+        addMusic.setBounds(225, 25, 40, 40);
         frame.add(addMusic);
 
         // Configuração e exibição do frame
@@ -119,8 +88,28 @@ public class Testtt {
                 playButton.setVisible(true);
                 mp3.escolherArquivo();
                 mp3.iniciaPrograma();
+//                double contador=0;
+//                System.out.println(mp3.duracao());
+//                while ( contador<mp3.duracao()){
+//                slider1.setValue((int)contador);
+//                contador++;
+//                    System.out.println(contador);
+//                }
+
+
+                String caminhoArquivo = mp3.getAudioSelecionado();
+                if (caminhoArquivo != null) {
+                    if (caminhoArquivo.equals("C:\\Users\\lucio\\Downloads\\av3-main\\av3-main\\src\\Sounds\\Legend.mp3")) {
+                        songTitleLabel.setText("Legend");
+                        artistNameLabel.setText("LeozinDograu");
+                    } else {
+
+                        songTitleLabel.setText(new File(caminhoArquivo).getName());
+                    }
+                }
             }
         });
+
 
         playButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -136,6 +125,6 @@ public class Testtt {
                 mp3.pausa();
             }
         });
+
     }
 }
-
