@@ -3,9 +3,13 @@ package testtt;
 import Sounds.Musicas;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 
 public class Testtt {
@@ -18,12 +22,23 @@ public class Testtt {
     private JButton pauseButton;
     private JPanel panel2;
     private JButton addMusic;
-    private Musicas mp3 = new Musicas();
-    public Testtt() {        // Criação do JFrame
+    private JList list1;
+    private JList<String> playlistList;
+    private DefaultListModel<String> playlistModel;
+
+    private Musicas mp3;
+    public Testtt() {
         JFrame frame = new JFrame("Music Player");
-        frame.setSize(300, 500);
+        frame.setSize(400, 500);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(null);
+
+        DefaultListModel<String> playlistModel = new DefaultListModel<>();
+        list1 = new JList<>(playlistModel);
+        list1.setBounds(300, 20, 150, 100);
+        frame.add(list1);
+
+        mp3 = new Musicas(playlistModel);
 
         // Painel para imagem de perfil
         JPanel imagePanel = new JPanel() {
@@ -61,6 +76,7 @@ public class Testtt {
         prevButton.setBounds(50, 320, 50, 50);
         frame.add(prevButton);
 
+
         JButton playButton = new JButton("▶");
         playButton.setBounds(125, 320, 50, 50);
         frame.add(playButton);
@@ -82,14 +98,24 @@ public class Testtt {
         frame.setVisible(true);
 
 
+//
+    JList list = new JList();
+//        model.addElement(mp3.exibeLista());
+//        list.setBounds(10, 25, 50, 50);
+//        frame.add(list);
+//        list.add() //USAR
+
         addMusic.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 mp3.parar();
                 playButton.setVisible(true);
                 mp3.escolherArquivo();
                 mp3.iniciaPrograma();
-//                double contador=0;
-//                System.out.println(mp3.duracao());
+                mp3.salvaMusica();
+                mp3.exibeLista();
+                double contador=0;
+//                System.out.println(mp3.getAudioSelecionado());
+                //System.out.println(mp3.duracao());
 //                while ( contador<mp3.duracao()){
 //                slider1.setValue((int)contador);
 //                contador++;
@@ -125,6 +151,7 @@ public class Testtt {
                 mp3.pausa();
             }
         });
+
 
     }
 }

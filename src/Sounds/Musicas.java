@@ -1,20 +1,26 @@
 package Sounds;
 
 
-import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.scene.media.Media;
 
 import javafx.scene.media.MediaPlayer;
-import javafx.util.Duration;
 
 
 import javax.swing.*;
 import java.io.File;
+import java.util.ArrayList;
 
 public class Musicas  {
     private MediaPlayer mediaPlayer;
     private Media media;
     private String audioSelecionado;
+    private DefaultListModel<String> playlistModel;  // Modelo de dados do JList
+    private ArrayList playlist = new ArrayList<>();
+
+    public Musicas(DefaultListModel<String> playlistModel) {
+        this.playlistModel = playlistModel;
+    }
+
     public void escolherArquivo(){
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
@@ -54,8 +60,19 @@ public class Musicas  {
         }
     }
 
-//Pq está retornando NaN?
-//    public Double duracao(){
-//        return mediaPlayer.getStopTime().toSeconds();
-//    }
+    public void salvaMusica(){
+        //playlist.add("C:\\Users\\DELL\\Downloads\\Legend.mp3");
+        playlist.add(audioSelecionado);
+        playlistModel.addElement(new File(audioSelecionado).getName());
+
+
+    }
+    public void exibeLista(){
+        System.out.println(playlist.toString());
+    }
+
+
+    public Object duracao() {
+       return mediaPlayer.getMedia().getDuration().toMinutes();
+    }
 }
