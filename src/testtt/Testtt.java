@@ -3,18 +3,13 @@ package testtt;
 import Sounds.Musicas;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.File;
 
 public class Testtt {
     private JPanel panel1;
-    private JSlider slider1;
     private JButton backButton;
     private JButton nextButton;
     private JButton playButton;
@@ -23,35 +18,28 @@ public class Testtt {
     private JPanel panel2;
     private JButton addMusic;
     private JList list1;
+    private JButton listButton;
+    private JProgressBar progressBar1;
+    private JLabel JlabelEnd;
+    private JLabel JLabelBegin;
+    private JTextField textField1;
+    private JButton novaPlaylist;
     private JList<String> playlistList;
     private DefaultListModel<String> playlistModel;
 
     private Musicas mp3;
     public Testtt() {
         JFrame frame = new JFrame("Music Player");
-        frame.setSize(400, 500);
+        frame.setSize(500, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(null);
 
-        DefaultListModel<String> playlistModel = new DefaultListModel<>();
-        list1 = new JList<>(playlistModel);
-        list1.setBounds(300, 20, 150, 100);
-        frame.add(list1);
+     //   DefaultListModel<String> playlistModel = new DefaultListModel<>();
+   //     list1 = new JList<>(playlistModel);
+      //  list1.setBounds(75, 30, 150, 150);
+    //    frame.add(list1);
 
         mp3 = new Musicas(playlistModel);
-
-        // Painel para imagem de perfil
-        JPanel imagePanel = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                g.setColor(Color.BLACK); // Placeholder para a imagem (apenas um círculo).
-                g.fillOval(0, 0, getWidth(), getHeight());
-            }
-        };
-        imagePanel.setBounds(75, 30, 150, 150);
-        frame.add(imagePanel);
-
 
         // Título da música
         JLabel songTitleLabel = new JLabel("Song Title", SwingConstants.CENTER);
@@ -66,11 +54,18 @@ public class Testtt {
         frame.add(artistNameLabel);
 
         // Barra de progresso (simples)
-        JSlider progressBar = new JSlider();
-        progressBar.setBounds(30, 280, 240, 10);
-        progressBar.setValue(30); // Valor de exemplo
-        frame.add(progressBar);
+        JProgressBar progressBar1 = new JProgressBar();
+        progressBar1.setBounds(30, 280, 240, 10);
+        progressBar1.setValue(30); // Valor de exemplo
+        frame.add(progressBar1);
 
+        JLabel JLabelBegin = new JLabel("0:00");
+        JLabelBegin.setBounds(5, 280, 30,10 );
+        frame.add(JLabelBegin);
+
+        JLabel JLabelEnd = new JLabel("0:00");
+        JLabelEnd.setBounds(305, 280, 50,10 );
+        frame.add(JLabelEnd);
         // Botões
         JButton prevButton = new JButton("⏮");
         prevButton.setBounds(50, 320, 50, 50);
@@ -91,37 +86,37 @@ public class Testtt {
 
 
         JButton addMusic = new JButton("☰");
-        addMusic.setBounds(225, 25, 40, 40);
+        addMusic.setBounds(235, 25, 80, 40);
         frame.add(addMusic);
+
+        JButton listButton = new JButton("Playlist");
+        listButton.setBounds(5, 400, 80, 30);
+        frame.add(listButton);
+
+        JTextField textField1 = new JTextField();
+        textField1.setBounds(100, 400, 240, 30);
+        frame.add(textField1);
+
+        JButton novaPlaylistButton = new JButton();
+        novaPlaylistButton.setBounds(360, 400, 40, 30);
+        frame.add(novaPlaylistButton);
 
         // Configuração e exibição do frame
         frame.setVisible(true);
-
-
-//
-    JList list = new JList();
-//        model.addElement(mp3.exibeLista());
-//        list.setBounds(10, 25, 50, 50);
-//        frame.add(list);
-//        list.add() //USAR
 
         addMusic.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 mp3.parar();
                 playButton.setVisible(true);
                 mp3.escolherArquivo();
-                mp3.iniciaPrograma();
+                try {
+                    mp3.iniciaPrograma(progressBar1);
+                    JLabelEnd.setText(String.valueOf(mp3.duracao()));
+                } catch (InterruptedException ex) {
+                    throw new RuntimeException(ex);
+                }
                 mp3.salvaMusica();
                 mp3.exibeLista();
-                double contador=0;
-//                System.out.println(mp3.getAudioSelecionado());
-                //System.out.println(mp3.duracao());
-//                while ( contador<mp3.duracao()){
-//                slider1.setValue((int)contador);
-//                contador++;
-//                    System.out.println(contador);
-//                }
-
 
                 String caminhoArquivo = mp3.getAudioSelecionado();
                 if (caminhoArquivo != null) {
@@ -141,7 +136,7 @@ public class Testtt {
             public void actionPerformed(ActionEvent e) {
                 playButton.setVisible(false);
                 pauseButton.setVisible(true);
-                mp3.toca();
+                    mp3.toca();
             }
         });
         pauseButton.addActionListener(new ActionListener() {
@@ -151,7 +146,6 @@ public class Testtt {
                 mp3.pausa();
             }
         });
-
-
     }
+
 }

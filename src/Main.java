@@ -4,7 +4,11 @@ import testtt.Testtt;
 
 public class Main extends Application {
     public static void main(String[] args) {
-        Testtt visual = new Testtt();
+        try {
+            Testtt visual = new Testtt();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
