@@ -12,6 +12,7 @@ public class Testtt {
     private JPanel panel1;
     private JButton backButton;
     private JButton nextButton;
+    private JButton save;
     private JButton playButton;
     private JPanel Jpanelimg;
     private JButton pauseButton;
@@ -24,6 +25,8 @@ public class Testtt {
     private JLabel JLabelBegin;
     private JTextField textField1;
     private JButton novaPlaylist;
+    private JButton escolherMusica;
+    private JTable table1;
     private JList<String> playlistList;
     private DefaultListModel<String> playlistModel;
 
@@ -34,10 +37,9 @@ public class Testtt {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(null);
 
-     //   DefaultListModel<String> playlistModel = new DefaultListModel<>();
-   //     list1 = new JList<>(playlistModel);
-      //  list1.setBounds(75, 30, 150, 150);
-    //    frame.add(list1);
+        TextArea area = new TextArea();
+        area.setBounds(75, 30, 150, 150);
+        frame.add(area);
 
         mp3 = new Musicas(playlistModel);
 
@@ -71,6 +73,10 @@ public class Testtt {
         prevButton.setBounds(50, 320, 50, 50);
         frame.add(prevButton);
 
+        JButton escolherMusica = new JButton();
+        escolherMusica.setText("Adicionar Música");
+        escolherMusica.setBounds(145, 450, 150, 50);
+        frame.add(escolherMusica);
 
         JButton playButton = new JButton("▶");
         playButton.setBounds(125, 320, 50, 50);
@@ -101,7 +107,15 @@ public class Testtt {
         novaPlaylistButton.setBounds(360, 400, 40, 30);
         frame.add(novaPlaylistButton);
 
-        // Configuração e exibição do frame
+        JButton save = new JButton();
+        save.setText("s");
+        save.setBounds(360, 450, 60, 30);
+        frame.add(save);
+
+        JButton carregarPlaylistButton = new JButton("Carregar Playlist");
+        carregarPlaylistButton.setBounds(100, 500, 150, 30);
+        frame.add(carregarPlaylistButton);
+
         frame.setVisible(true);
 
         addMusic.addActionListener(new ActionListener() {
@@ -115,8 +129,7 @@ public class Testtt {
                 } catch (InterruptedException ex) {
                     throw new RuntimeException(ex);
                 }
-                mp3.salvaMusica();
-                mp3.exibeLista();
+
 
                 String caminhoArquivo = mp3.getAudioSelecionado();
                 if (caminhoArquivo != null) {
@@ -146,6 +159,47 @@ public class Testtt {
                 mp3.pausa();
             }
         });
+
+        novaPlaylistButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                textField1.setText(mp3.criaPlaylist());
+            }
+        });
+
+        escolherMusica.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mp3.procuraPlaylist(area);
+            }
+        });
+
+        save.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mp3.salvarPlaylist(textField1);
+            }
+        });
+
+        carregarPlaylistButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                int escolha = fileChooser.showOpenDialog(null);
+
+                if (escolha == JFileChooser.APPROVE_OPTION) {
+                    String caminhoArquivo = fileChooser.getSelectedFile().getPath();
+                    mp3.carregarEReproduzirPlaylist(caminhoArquivo);
+                    try {
+                        mp3.iniciaPrograma(progressBar1);
+                    } catch (InterruptedException ex) {
+                        throw new RuntimeException(ex);
+                    }
+
+                }
+            }
+        });
+
     }
 
 }
