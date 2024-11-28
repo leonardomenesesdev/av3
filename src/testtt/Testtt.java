@@ -105,7 +105,8 @@ public class Testtt {
         frame.add(textField1);
 
         JButton novaPlaylistButton = new JButton();
-        novaPlaylistButton.setBounds(360, 400, 40, 30);
+        novaPlaylistButton.setText("Nova Playlist");
+        novaPlaylistButton.setBounds(360, 400, 100, 30);
         frame.add(novaPlaylistButton);
 
         JButton save = new JButton();
@@ -114,7 +115,7 @@ public class Testtt {
         frame.add(save);
 
         JButton carregarPlaylistButton = new JButton("Carregar Playlist");
-        carregarPlaylistButton.setBounds(100, 500, 150, 30);
+        carregarPlaylistButton.setBounds(145, 520, 150, 30);
         frame.add(carregarPlaylistButton);
 
         frame.setVisible(true);
