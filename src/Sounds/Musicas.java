@@ -1,8 +1,11 @@
 package Sounds;
 
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Task;
 import javafx.scene.media.Media;
 
 import javafx.scene.media.MediaPlayer;
@@ -13,7 +16,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.CountDownLatch;
 
 public class Musicas  {
     private MediaPlayer mediaPlayer;
@@ -21,7 +26,7 @@ public class Musicas  {
     private String audioSelecionado;
     private DefaultListModel<String> playlistModel;
     private ArrayList<String> playlist = new ArrayList<>();
-
+    private boolean terminou = false;
     public Musicas(DefaultListModel<String> playlistModel) {
         this.playlistModel = playlistModel;
     }
@@ -115,46 +120,47 @@ public class Musicas  {
 
 
 
-    public void carregarEReproduzirPlaylist(String caminhoArquivo) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(caminhoArquivo))) {
+
+
+
+
+
+    public List carregaPlaylist(String caminhoArquivo){
+        try (BufferedReader reader = new BufferedReader(new FileReader(caminhoArquivo))){
+            List<String> linhas = new ArrayList<>();
             String linha;
             while ((linha = reader.readLine()) != null) {
-                tocarMusica(linha);
+                linhas.add(linha);
             }
+            return linhas;
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null,
                     "Erro ao carregar ou reproduzir playlist: " + e.getMessage(),
                     "Erro",
                     JOptionPane.ERROR_MESSAGE);
         }
+        return null;
     }
 
-    public void tocarMusica(String caminhoMusica) {
-        try {
-            media = new Media(new File(caminhoMusica).toURI().toString());
-            mediaPlayer = new MediaPlayer(media);
 
-            // Toca a música
+    public synchronized void reproduzirPlaylist(List playlist) {
+        for(int i = 0; i<playlist.size(); i++){
+            media = new Media(new File(String.valueOf(playlist.get(i))).toURI().toString());
+            mediaPlayer = new MediaPlayer(media);
             mediaPlayer.play();
 
-            // Espera a música terminar antes de continuar
+
             mediaPlayer.setOnEndOfMedia(new Runnable() {
                 @Override
                 public void run() {
                     mediaPlayer.stop();
+                    mediaPlayer.dispose();
+
                 }
             });
-
-            while (mediaPlayer.getStatus() != MediaPlayer.Status.STOPPED) {
-                Thread.sleep(100);
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null,
-                    "Erro ao reproduzir música: " + caminhoMusica + "\n" + e.getMessage(),
-                    "Erro",
-                    JOptionPane.ERROR_MESSAGE);
         }
     }
+
 
 
 }

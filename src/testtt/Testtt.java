@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.List;
 
 public class Testtt {
     private JPanel panel1;
@@ -116,6 +117,10 @@ public class Testtt {
         carregarPlaylistButton.setBounds(100, 500, 150, 30);
         frame.add(carregarPlaylistButton);
 
+        JButton reproduzPlaylist = new JButton("Reproduzir Playlist");
+        reproduzPlaylist.setBounds(300, 500, 150, 30);
+        frame.add(reproduzPlaylist);
+
         frame.setVisible(true);
 
         addMusic.addActionListener(new ActionListener() {
@@ -189,17 +194,13 @@ public class Testtt {
 
                 if (escolha == JFileChooser.APPROVE_OPTION) {
                     String caminhoArquivo = fileChooser.getSelectedFile().getPath();
-                    mp3.carregarEReproduzirPlaylist(caminhoArquivo);
-                    try {
-                        mp3.iniciaPrograma(progressBar1);
-                    } catch (InterruptedException ex) {
-                        throw new RuntimeException(ex);
-                    }
-
+                    List<String> playlistCarregada = mp3.carregaPlaylist(caminhoArquivo);
+                    System.out.println("playlist carregada");
+                    songTitleLabel.setText(new File(caminhoArquivo).getName());
+                    mp3.reproduzirPlaylist(playlistCarregada);
                 }
             }
         });
-
     }
 
 }
