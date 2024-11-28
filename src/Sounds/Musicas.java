@@ -143,55 +143,22 @@ public class Musicas  {
     }
 
 
-//    public synchronized void reproduzirPlaylist(List playlist) {
-//        for(int i = 0; i<playlist.size(); i++){
-//            media = new Media(new File(String.valueOf(playlist.get(i))).toURI().toString());
-//            mediaPlayer = new MediaPlayer(media);
-//            mediaPlayer.play();
-//
-//
-//            mediaPlayer.setOnEndOfMedia(new Runnable() {
-//                @Override
-//                public void run() {
-//                    mediaPlayer.stop();
-//                    mediaPlayer.dispose();
-//
-//                }
-//            });
-//        }
-//    }
+    public synchronized void reproduzirPlaylist(List playlist) {
+        for(int i = 0; i<playlist.size(); i++){
+            media = new Media(new File(String.valueOf(playlist.get(i))).toURI().toString());
+            mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.play();
 
-    public synchronized void reproduzirPlaylist(final List<String> playlist) {
-        Task<Void> task = new Task<Void>() {
-            @Override
-            protected Void call() throws Exception {
-                for (int i = 0; i < playlist.size(); i++) {
-                    media = new Media(new File(playlist.get(i)).toURI().toString());
-                    mediaPlayer = new MediaPlayer(media);
 
-                    final CountDownLatch latch = new CountDownLatch(1);
+            mediaPlayer.setOnEndOfMedia(new Runnable() {
+                @Override
+                public void run() {
+                    mediaPlayer.stop();
+                    mediaPlayer.dispose();
 
-                    mediaPlayer.setOnEndOfMedia(new Runnable() {
-                        @Override
-                        public void run() {
-                            mediaPlayer.stop();
-                            mediaPlayer.dispose();
-                            latch.countDown();
-                        }
-                    });
-                    mediaPlayer.play();
-                    try {
-                        latch.await();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                        Thread.currentThread().interrupt();
-                    }
                 }
-                return null;
-            }
-        };
-
-        new Thread(task).start();
+            });
+        }
     }
 
 
