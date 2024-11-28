@@ -117,10 +117,6 @@ public class Testtt {
         carregarPlaylistButton.setBounds(100, 500, 150, 30);
         frame.add(carregarPlaylistButton);
 
-        JButton reproduzPlaylist = new JButton("Reproduzir Playlist");
-        reproduzPlaylist.setBounds(300, 500, 150, 30);
-        frame.add(reproduzPlaylist);
-
         frame.setVisible(true);
 
         addMusic.addActionListener(new ActionListener() {
