@@ -58,15 +58,15 @@ public class Testtt {
 
         // Barra de progresso (simples)
         JProgressBar progressBar1 = new JProgressBar();
-        progressBar1.setBounds(30, 280, 240, 10);
+        progressBar1.setBounds(50, 280, 240, 10);
         progressBar1.setValue(30); // Valor de exemplo
         frame.add(progressBar1);
 
-        JLabel JLabelBegin = new JLabel("0:00");
-        JLabelBegin.setBounds(5, 280, 30,10 );
+        JLabel JLabelBegin = new JLabel("0.00");
+        JLabelBegin.setBounds(5, 280, 50,10 );
         frame.add(JLabelBegin);
 
-        JLabel JLabelEnd = new JLabel("0:00");
+        JLabel JLabelEnd = new JLabel("0.00");
         JLabelEnd.setBounds(305, 280, 50,10 );
         frame.add(JLabelEnd);
         // Botões
@@ -126,8 +126,8 @@ public class Testtt {
                 playButton.setVisible(true);
                 mp3.escolherArquivo();
                 try {
-                    mp3.iniciaPrograma(progressBar1);
-                    JLabelEnd.setText(String.valueOf(mp3.duracao()));
+                    mp3.iniciaPrograma(progressBar1, JLabelBegin);
+                    JLabelEnd.setText(mp3.duracao());
                 } catch (InterruptedException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -139,7 +139,6 @@ public class Testtt {
                         songTitleLabel.setText("Legend");
                         artistNameLabel.setText("LeozinDograu");
                     } else {
-
                         songTitleLabel.setText(new File(caminhoArquivo).getName());
                     }
                 }
@@ -196,6 +195,20 @@ public class Testtt {
                     songTitleLabel.setText(new File(caminhoArquivo).getName());
                     mp3.reproduzirPlaylist(playlistCarregada);
                 }
+            }
+        });
+
+        nextButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mp3.avancarSegundos();
+            }
+        });
+
+        prevButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mp3.voltarSegundos();
             }
         });
     }

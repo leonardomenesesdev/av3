@@ -48,7 +48,7 @@ public class Musicas  {
             audioSelecionado = fileChooser.getSelectedFile().toPath().toString(); //Talvez n precise do toString
         }
     }
-    public void iniciaPrograma(JProgressBar progressBar) throws InterruptedException {
+    public void iniciaPrograma(JProgressBar progressBar, JLabel tempoAtual) throws InterruptedException {
         media = new Media(new File(audioSelecionado).toURI().toString());
         mediaPlayer = new MediaPlayer(media);
         Thread.sleep(3000);
@@ -57,11 +57,12 @@ public class Musicas  {
             public void changed(ObservableValue<? extends Duration> observable, Duration oldValue, Duration newValue) {
                 double progress = newValue.toSeconds() / mediaPlayer.getTotalDuration().toSeconds();
                 progressBar.setValue((int) (progress * 100));
-                System.out.println("mudança");
+                double tempo = mediaPlayer.getCurrentTime().toMinutes();
+                String tempoString = String.format("%.2f", tempo);
+                tempoAtual.setText(tempoString);
             }
         });
     }
-
     public String getAudioSelecionado() {
         return audioSelecionado;
     }
@@ -112,15 +113,11 @@ public class Musicas  {
         return playlist;
     }
 
-    public Object duracao() {
-       return mediaPlayer.getMedia().getDuration().toMinutes();
+    public String duracao() {
+       double duracao = mediaPlayer.getMedia().getDuration().toMinutes();
+        String duracaoString = String.format("%.2f", duracao);
+        return duracaoString;
     }
-
-
-
-
-
-
 
 
 
@@ -162,4 +159,21 @@ public class Musicas  {
     }
 
 
-}
+    public void avancarSegundos(){
+        double tempoAtual = mediaPlayer.getCurrentTime().toSeconds();
+        double avancarTempo = tempoAtual+10;
+        if(avancarTempo>mediaPlayer.getTotalDuration().toSeconds()){
+            avancarTempo = mediaPlayer.getTotalDuration().toSeconds();
+        }
+        mediaPlayer.seek(Duration.seconds(avancarTempo));
+    }
+
+    public void voltarSegundos() {
+        double tempoAtual = mediaPlayer.getCurrentTime().toSeconds();
+        double voltarTempo = tempoAtual - 10;
+        if (voltarTempo == mediaPlayer.getStartTime().toSeconds()) {
+            voltarTempo = mediaPlayer.getStartTime().toSeconds();
+        }
+        mediaPlayer.seek(Duration.seconds(voltarTempo));
+        }
+    }
