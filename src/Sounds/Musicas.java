@@ -129,6 +129,7 @@ public class Musicas  {
 
     public List carregaPlaylist(String caminhoArquivo, JList list){
         try (BufferedReader reader = new BufferedReader(new FileReader(caminhoArquivo))){
+
             String linha;
             while ((linha = reader.readLine()) != null) {
                 linhas.add(linha);
@@ -167,26 +168,6 @@ public class Musicas  {
         });
 
     }
-//    public void reproduzEscolha(JList list){
-//        list.addMouseListener(new MouseAdapter() {
-//            @Override
-//            public void mouseClicked(MouseEvent e) {
-//                index = list.locationToIndex(e.getPoint());
-//                String musicaSelecionada = (String) list.getModel().getElementAt(index);
-//                File arquivo = new File(musicaSelecionada);
-//                media = new Media(arquivo.toURI().toString());
-//                mediaPlayer = new MediaPlayer(media);
-//                mediaPlayer.play();
-//
-//                DefaultListModel<String> listModel = new DefaultListModel<>();
-//                for (String musica : linhas) {
-//                    listModel.addElement(new File(musica).getName());
-//                }
-//                list.setModel(listModel);
-//            }
-//        });
-//
-//    }
 
     public void reproduzEscolha(JList list, JProgressBar progressBar, JLabel tempoAtual, JLabel tempoFinal, JLabel songTitle ) {
         list.addMouseListener(new MouseAdapter() {
@@ -219,8 +200,6 @@ public class Musicas  {
             }
         });
     }
-
-
 
     public synchronized void reproduzirPlaylist(final List<String> playlist, JProgressBar progressBar, JLabel tempoAtual, JLabel tempoFinal, JLabel songTitle) {
         Task<Void> task = new Task<Void>() {
@@ -266,7 +245,6 @@ public class Musicas  {
                 return null;
             }
         };
-
         new Thread(task).start();
     }
 
@@ -295,6 +273,7 @@ public class Musicas  {
         double volume = sliderVolume.getValue() / 100.0;
         mediaPlayer.setVolume(volume);
     }
+
     public void adicionaNaPlaylist() throws IOException {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -320,7 +299,7 @@ public class Musicas  {
         escritor.close();
     }
 
-    //METODOS PARA MUSICA ANTERIOR E PROXIMA , COM SELETOR DE MUSICA ( TrocarMusica)
+    //METODOS PARA MUSICA ANTERIOR E PROXIMA , COM SELETOR DE MUSICA ( TrocarMusica) -ENZO
     private void trocarMusica(String caminhoArquivo) {
         if (mediaPlayer != null) {
             mediaPlayer.stop();
@@ -386,9 +365,6 @@ public class Musicas  {
             JOptionPane.showMessageDialog(null, "Você já está na última música.");
         }
     }
-
-
-
 }
 
 

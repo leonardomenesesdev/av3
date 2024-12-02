@@ -91,8 +91,9 @@ public class Testtt {
 
 
         JButton escolherMusica = new JButton();
-        escolherMusica.setText("Adicionar Música");
-        escolherMusica.setBounds(165, 450, 150, 50);
+        escolherMusica.setText("Adicionar músicas");
+        escolherMusica.setBounds(165, 500, 150, 30);
+        escolherMusica.setVisible(false);
         frame.add(escolherMusica);
 
         JButton playButton = new JButton("▶");
@@ -122,43 +123,46 @@ public class Testtt {
         frame.add(proximaMusic);
 
         JButton paraMusica = new JButton("⏹️");
-        paraMusica.setBounds(400, 320, 60, 50);
+        paraMusica.setBounds(400, 320, 55, 50);
         frame.add(paraMusica);
 
         JButton addMusic = new JButton("☰");
         addMusic.setBounds(5, 25, 60, 40);
         frame.add(addMusic);
 
-        JLabel listButton = new JLabel("Playlist");
-        listButton.setBounds(10, 400, 80, 30);
+        JLabel listButton = new JLabel("Playlist", SwingConstants.CENTER);
+        listButton.setBounds(200, 400, 80, 30);
         listButton.setFont(new Font("Arial", Font.BOLD, 16));
 
         frame.add(listButton);
 
-        JTextField textField1 = new JTextField();
-        textField1.setBounds(110, 400, 240, 30);
+        JTextField textField1 = new JTextField(SwingConstants.CENTER);
+        textField1.setBounds(110, 450, 240, 30);
+        textField1.setVisible(false);
         frame.add(textField1);
 
         JButton novaPlaylistButton = new JButton();
         novaPlaylistButton.setText("Nova Playlist");
-        novaPlaylistButton.setBounds(5, 450, 100, 30);
+        novaPlaylistButton.setBounds(60, 450, 150, 30);
         frame.add(novaPlaylistButton);
 
         JButton save = new JButton();
-        save.setText("s");
-        save.setBounds(380, 400, 60, 30);
+        save.setText("save");
+        save.setVisible(false);
+        save.setBounds(380, 450, 100, 30);
         frame.add(save);
 
         JButton carregarPlaylistButton = new JButton("Carregar Playlist");
-        carregarPlaylistButton.setBounds(5, 505, 150, 30);
+        carregarPlaylistButton.setBounds(60, 500, 150, 30);
         frame.add(carregarPlaylistButton);
 
-        JButton reproduzirPlaylistButton = new JButton("Adicionar em playlist existente");
-        reproduzirPlaylistButton.setBounds(150, 505, 190, 20);
+        JButton reproduzirPlaylistButton = new JButton("Adicionar música");
+        reproduzirPlaylistButton.setBounds(270, 450, 150, 30);
         frame.add(reproduzirPlaylistButton);
 
-        JButton excluirButton = new JButton("Excluir música da playlist");
-        excluirButton.setBounds(150, 530, 190, 20);
+        JButton excluirButton = new JButton("Excluir da playlist");
+        excluirButton.setBounds(270, 500, 150, 30);
+        excluirButton.setVisible(false);
         frame.add(excluirButton);
 
         frame.setVisible(true);
@@ -206,6 +210,12 @@ public class Testtt {
         novaPlaylistButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 textField1.setText(mp3.criaPlaylist());
+                textField1.setVisible(true);
+                novaPlaylistButton.setVisible(false);
+                escolherMusica.setVisible(true);
+                save.setVisible(true);
+                carregarPlaylistButton.setVisible(false);
+                reproduzirPlaylistButton.setVisible(false);
             }
         });
 
@@ -220,16 +230,23 @@ public class Testtt {
             @Override
             public void actionPerformed(ActionEvent e) {
                 mp3.salvarPlaylist(textField1);
+                novaPlaylistButton.setVisible(true);
+                carregarPlaylistButton.setVisible(true);
+                reproduzirPlaylistButton.setVisible(true);
+                textField1.setVisible(false);
+                escolherMusica.setVisible(false);
+                save.setVisible(false);
+                carregarPlaylistButton.setVisible(true);
             }
         });
 
         carregarPlaylistButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                excluirButton.setVisible(true);
                 JFileChooser fileChooser = new JFileChooser();
                 fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
                 int escolha = fileChooser.showOpenDialog(null);
-
                 if (escolha == JFileChooser.APPROVE_OPTION) {
                     caminhoArquivo = fileChooser.getSelectedFile().getPath();
                     playlistCarregada = mp3.carregaPlaylist(caminhoArquivo, list);
@@ -302,20 +319,14 @@ public class Testtt {
         list.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                mp3.reproduzEscolha(list, progressBar1, JLabelBegin, JLabelEnd, songTitleLabel);
                 if(excluiClicado == true){
                         mp3.removeMusica(list);
+                        excluiClicado = false;
+                        if(excluiClicado == false){
+                            excluirButton.setVisible(true);
+                        }
                 }
-                excluiClicado = false;
-                if(excluiClicado == false){
-                    excluirButton.setVisible(true);
-                }
-
-                if(e.getClickCount() == 1) {
-                    mp3.reproduzEscolha(list, progressBar1, JLabelBegin, JLabelEnd, songTitleLabel);
-
-                }
-
-
             }
         });
 
