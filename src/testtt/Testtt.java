@@ -3,10 +3,17 @@ package testtt;
 import Sounds.Musicas;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 public class Testtt {
@@ -30,96 +37,131 @@ public class Testtt {
     private JTable table1;
     private JList<String> playlistList;
     private DefaultListModel<String> playlistModel;
-
+    private List<String> playlistCarregada;
     private Musicas mp3;
+    private String caminhoArquivo;
+    private boolean excluiClicado = false;
     public Testtt() {
         JFrame frame = new JFrame("Music Player");
         frame.setSize(500, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(null);
 
+        //Area de texto
         TextArea area = new TextArea();
-        area.setBounds(75, 30, 150, 150);
+        area.setBounds(150, 30, 150, 150);
         frame.add(area);
+        area.setVisible(false);
+
+        JList list = new JList<>();
+        list.setBounds(150, 30, 150, 150);
+        frame.add(list);
 
         mp3 = new Musicas(playlistModel);
 
         // Título da música
         JLabel songTitleLabel = new JLabel("Song Title", SwingConstants.CENTER);
         songTitleLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        songTitleLabel.setBounds(50, 200, 200, 30);
+        songTitleLabel.setBounds(125, 200, 200, 30);
         frame.add(songTitleLabel);
 
         // Nome do artista
         JLabel artistNameLabel = new JLabel("Artist Name", SwingConstants.CENTER);
         artistNameLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-        artistNameLabel.setBounds(50, 230, 200, 30);
+        artistNameLabel.setBounds(125, 230, 200, 30);
         frame.add(artistNameLabel);
 
         // Barra de progresso (simples)
         JProgressBar progressBar1 = new JProgressBar();
-        progressBar1.setBounds(50, 280, 240, 10);
-        progressBar1.setValue(30); // Valor de exemplo
+        progressBar1.setBounds(125, 280, 240, 10);
+        progressBar1.setValue(0);
         frame.add(progressBar1);
 
         JLabel JLabelBegin = new JLabel("0.00");
-        JLabelBegin.setBounds(5, 280, 50,10 );
+        JLabelBegin.setBounds(90, 280, 50,10 );
         frame.add(JLabelBegin);
 
         JLabel JLabelEnd = new JLabel("0.00");
-        JLabelEnd.setBounds(305, 280, 50,10 );
+        JLabelEnd.setBounds(315, 280, 50,10 );
         frame.add(JLabelEnd);
         // Botões
-        JButton prevButton = new JButton("⏮");
-        prevButton.setBounds(50, 320, 50, 50);
+        JButton prevButton = new JButton("↩");
+        prevButton.setBounds(135, 320, 50, 50);
         frame.add(prevButton);
+
 
         JButton escolherMusica = new JButton();
         escolherMusica.setText("Adicionar Música");
-        escolherMusica.setBounds(145, 450, 150, 50);
+        escolherMusica.setBounds(165, 450, 150, 50);
         frame.add(escolherMusica);
 
         JButton playButton = new JButton("▶");
-        playButton.setBounds(125, 320, 50, 50);
+        playButton.setBounds(200, 320, 50, 50);
         frame.add(playButton);
 
-        JButton nextButton = new JButton("⏭");
-        nextButton.setBounds(200, 320, 50, 50);
+        JButton nextButton = new JButton("↪");
+        nextButton.setBounds(265, 320, 50, 50);
         frame.add(nextButton);
 
+        JSlider sliderVolume = new JSlider();
+        sliderVolume.setBounds(5, 290, 20, 100);
+        sliderVolume.setOrientation(JSlider.VERTICAL);
+        sliderVolume.setValue(100);
+        frame.add(sliderVolume);
+
         JButton pauseButton = new JButton("||");
-        pauseButton.setBounds(125, 320, 50, 50);
+        pauseButton.setBounds(200, 320, 50, 50);
         frame.add(pauseButton);
 
+        JButton antesMusic = new JButton("⏪");
+        antesMusic.setBounds(70, 320, 50, 50);
+        frame.add(antesMusic);
+
+        JButton proximaMusic = new JButton("⏩");
+        proximaMusic.setBounds(330, 320, 50, 50);
+        frame.add(proximaMusic);
+
+        JButton paraMusica = new JButton("⏹️");
+        paraMusica.setBounds(400, 320, 60, 50);
+        frame.add(paraMusica);
 
         JButton addMusic = new JButton("☰");
-        addMusic.setBounds(235, 25, 80, 40);
+        addMusic.setBounds(5, 25, 60, 40);
         frame.add(addMusic);
 
-        JButton listButton = new JButton("Playlist");
-        listButton.setBounds(5, 400, 80, 30);
+        JLabel listButton = new JLabel("Playlist");
+        listButton.setBounds(10, 400, 80, 30);
+        listButton.setFont(new Font("Arial", Font.BOLD, 16));
+
         frame.add(listButton);
 
         JTextField textField1 = new JTextField();
-        textField1.setBounds(100, 400, 240, 30);
+        textField1.setBounds(110, 400, 240, 30);
         frame.add(textField1);
 
         JButton novaPlaylistButton = new JButton();
         novaPlaylistButton.setText("Nova Playlist");
-        novaPlaylistButton.setBounds(360, 400, 100, 30);
+        novaPlaylistButton.setBounds(5, 450, 100, 30);
         frame.add(novaPlaylistButton);
 
         JButton save = new JButton();
         save.setText("s");
-        save.setBounds(360, 450, 60, 30);
+        save.setBounds(380, 400, 60, 30);
         frame.add(save);
 
         JButton carregarPlaylistButton = new JButton("Carregar Playlist");
-        carregarPlaylistButton.setBounds(145, 520, 150, 30);
+        carregarPlaylistButton.setBounds(5, 505, 150, 30);
         frame.add(carregarPlaylistButton);
 
-        frame.setVisible(true);
+        JButton reproduzirPlaylistButton = new JButton("Adicionar em playlist existente");
+        reproduzirPlaylistButton.setBounds(150, 505, 190, 20);
+        frame.add(reproduzirPlaylistButton);
 
+        JButton excluirButton = new JButton("Excluir música da playlist");
+        excluirButton.setBounds(150, 530, 190, 20);
+        frame.add(excluirButton);
+
+        frame.setVisible(true);
         addMusic.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 mp3.parar();
@@ -189,15 +231,34 @@ public class Testtt {
                 int escolha = fileChooser.showOpenDialog(null);
 
                 if (escolha == JFileChooser.APPROVE_OPTION) {
-                    String caminhoArquivo = fileChooser.getSelectedFile().getPath();
-                    List<String> playlistCarregada = mp3.carregaPlaylist(caminhoArquivo);
-                    System.out.println("playlist carregada");
+                    caminhoArquivo = fileChooser.getSelectedFile().getPath();
+                    playlistCarregada = mp3.carregaPlaylist(caminhoArquivo, list);
                     songTitleLabel.setText(new File(caminhoArquivo).getName());
-                    mp3.reproduzirPlaylist(playlistCarregada);
+                    mp3.reproduzirPlaylist(playlistCarregada, progressBar1, JLabelBegin, JLabelEnd, songTitleLabel);
+                    pauseButton.setVisible(true);
+                    playButton.setVisible(false);
                 }
             }
         });
 
+        reproduzirPlaylistButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    mp3.adicionaNaPlaylist();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
+
+        excluirButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                excluiClicado = true;
+                excluirButton.setVisible(false);
+            }
+        });
         nextButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -211,6 +272,54 @@ public class Testtt {
                 mp3.voltarSegundos();
             }
         });
+
+        sliderVolume.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                mp3.volume(sliderVolume);
+            }
+        });
+
+        paraMusica.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mp3.paraReproducao();
+                progressBar1.setValue(0);
+                pauseButton.setVisible(false);
+                playButton.setVisible(true);
+            }
+        });
+        antesMusic.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {mp3.musicaAnterior(songTitleLabel, progressBar1, JLabelBegin, JLabelEnd);}
+        });
+
+        proximaMusic.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {mp3.proximaMusica(songTitleLabel, progressBar1, JLabelBegin, JLabelEnd);}
+        });
+
+        list.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(excluiClicado == true){
+                        mp3.removeMusica(list);
+                }
+                excluiClicado = false;
+                if(excluiClicado == false){
+                    excluirButton.setVisible(true);
+                }
+
+                if(e.getClickCount() == 1) {
+                    mp3.reproduzEscolha(list, progressBar1, JLabelBegin, JLabelEnd, songTitleLabel);
+
+                }
+
+
+            }
+        });
+
     }
+
 
 }
